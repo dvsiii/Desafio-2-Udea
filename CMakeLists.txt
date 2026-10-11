@@ -14,6 +14,11 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
 add_executable(Desafio2_D_Castro
   main.cpp
+  usuarios.h usuarios.cpp
+  interfaz.h interfaz.cpp
+  fotos.h fotos.cpp
+  album.h album.cpp
+  mensajes.h mensajes.cpp
 )
 target_link_libraries(Desafio2_D_Castro PRIVATE Qt${QT_VERSION_MAJOR}::Core)
 
