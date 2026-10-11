@@ -8,7 +8,8 @@ class Album
     string usuario;
     string nombre;
     int privacidad;
-    Fotos;
+    Fotos* foto;
+    int numfoto;
 public:
     Album();
     string getnombre();
@@ -17,7 +18,7 @@ public:
     void setusuario(string Nusuario);
     int getprivacidad();
     void setprivacidad(int Nprivacidad);
-    int establecerp();
+    void establecerfotos();
+    ~Album();
 };
-
 #endif // ALBUM_H
