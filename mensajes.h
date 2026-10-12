@@ -18,8 +18,6 @@ public:
     void setleido(bool Nleido);
     string getemisor();
     void setemisor(string Nemisor);
-    string BuscarRangoFecha();
-    bool leermensaje();
+    void leermensaje();
 };
-
 #endif // MENSAJES_H
