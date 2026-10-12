@@ -18,7 +18,7 @@ public:
     void setusuario(string Nusuario);
     int getprivacidad();
     void setprivacidad(int Nprivacidad);
-    void establecerfotos();
+    void establecerfotos(Fotos Nfoto);
     ~Album();
 };
 #endif // ALBUM_H

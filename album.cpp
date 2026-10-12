@@ -25,7 +25,9 @@ int Album::getprivacidad(){
 void Album::setprivacidad(int Nprivacidad){
     privacidad=Nprivacidad;
 }
-void Album::establecerfotos(){
+void Album::establecerfotos(Fotos Nfoto){
+    foto[numfoto]=Nfoto;
+    numfoto++;
 }
 Album::~Album(){
     delete[] foto;
