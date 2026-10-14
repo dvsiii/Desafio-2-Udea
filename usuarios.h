@@ -15,15 +15,17 @@ class Usuarios
     string pais;
     string inscripcion;
     Mensajes* mensajes;
-    string amigos;
-    string solicitudamigos;
+    string* amigos;
+    string* solicitudamigos;
     string fotousuario;
     string sugerencias;
     int numalbum;
     int nummensajes;
+    int numsolicitud;
+    int numamigos;
 public:
     Usuarios();
-    string BuscarRangoFecha();
+    void BuscarRangoFecha(string Finicial, string Ffinal);
     string getnombre();
     void setnombre(string Nnombre);
     string getcontrasena();
@@ -38,10 +40,12 @@ public:
     void setpais(string Npais);
     string getinscripcion();
     void setinscripcion(string Ninscripcion);
-    string getamigos();
-    void setamigos(string Namigos);
-    string getsolicitud();
-    void setsolicitud(string Nsolicitud);
+    int getnumamigos();
+    void setnumamigos(int Nnumamigos);
+    void estableceramigos(string Namigo);
+    void establecersolicitud(string solicitud);
+    int getnumsolicitud();
+    void setnumsolicitud(int Nnumsolicitud);
     string getfotousuario();
     void setfotousario(string Nfotousuario);
     string getsugerencias();
@@ -50,8 +54,10 @@ public:
     void setnumalbum(int Nnumalbum);
     int getnummensajes();
     void setnumnensajes(int Nnummensajes);
-    bool aceptarsolicitud();
+    void aceptarsolicitud(string solicitud);
     void vermensajes();
+    void estableceralbum(Album Nalbum);
+    void establevermensajes(Mensajes Nmensaje);
     ~Usuarios();
 };
 

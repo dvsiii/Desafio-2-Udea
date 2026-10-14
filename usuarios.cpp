@@ -11,12 +11,14 @@ Usuarios::Usuarios() {
     pais="";
     inscripcion="";
     mensajes=new Mensajes[100];
-    amigos="";
-    solicitudamigos="";
+    amigos=new string[100];
+    solicitudamigos=new string[100];
     fotousuario="";
     sugerencias="";
     numalbum=0;
     nummensajes=0;
+    numsolicitud=0;
+    numamigos=0;
 }
 string Usuarios::getnombre(){
     return nombre;
@@ -60,17 +62,25 @@ string Usuarios::getinscripcion(){
 void Usuarios::setinscripcion(string Ninscripcion){
     inscripcion=Ninscripcion;
 }
-string Usuarios::getamigos(){
-    return amigos;
+int Usuarios::getnumamigos(){
+    return numamigos;
 }
-void Usuarios::setamigos(string Namigos){
-    amigos=Namigos;
+void Usuarios::setnumamigos(int Nnumamigos){
+    numamigos=Nnumamigos;
 }
-string Usuarios::getsolicitud(){
-    return solicitudamigos;
+void Usuarios::estableceramigos(string Namigo){
+    amigos[numamigos]=Namigo;
+    numamigos++;
 }
-void Usuarios::setsolicitud(string Nsolicitud){
-    solicitudamigos=Nsolicitud;
+void Usuarios::establecersolicitud(string solicitud){
+    solicitudamigos[numsolicitud]=solicitud;
+    numsolicitud++;
+}
+int Usuarios::getnumsolicitud(){
+    return numsolicitud;
+}
+void Usuarios::setnumsolicitud(int Nnumsolicitud){
+    numsolicitud=Nnumsolicitud;
 }
 string Usuarios::getfotousuario(){
     return fotousuario;
@@ -96,15 +106,46 @@ int Usuarios::getnummensajes(){
 void Usuarios::setnumnensajes(int Nnummensajes){
     nummensajes=Nnummensajes;
 }
+void Usuarios::estableceralbum(Album Nalbum){
+    album[numalbum]=Nalbum;
+    numalbum++;
+}
+void Usuarios::establevermensajes(Mensajes Nmensaje){
+    mensajes[nummensajes]=Nmensaje;
+    nummensajes++;
+}
+void Usuarios::BuscarRangoFecha(string Finicial, string Ffinal){
+    for(int i=0;i<nummensajes;i++){
+        if(mensajes[i].getfecha()>=Finicial){
+            if(mensajes[i].getfecha()<=Ffinal){
+                mensajes[i].leermensaje();
+            }
+        }
+    }
+}
+void Usuarios::aceptarsolicitud(string solicitud){
+    for(int i=0;i<numsolicitud;i++){
+        if(solicitudamigos[i]==solicitud){
+            solicitudamigos[i]="";
+            estableceramigos(solicitud);
+            numsolicitud--;
+        }
+    }
+}
+void Usuarios::vermensajes(){
+    for(int i=0;i<nummensajes;i++){
+        if(mensajes[i].getleido()==false){
+            mensajes[i].leermensaje();
+        }
+    }
+}
 Usuarios::~Usuarios(){
     delete[]album;
     delete[]mensajes;
+    delete[]solicitudamigos;
+    delete[]amigos;
     album=NULL;
     mensajes=NULL;
-}
-string Usuarios::BuscarRangoFecha(){
-}
-bool Usuarios::aceptarsolicitud(){
-}
-void Usuarios::vermensajes(){
+    solicitudamigos=NULL;
+    amigos=NULL;
 }
