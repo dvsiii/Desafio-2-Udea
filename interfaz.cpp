@@ -48,40 +48,92 @@ void Interfaz::cargardatos(){
     lectura.close();
     lectura.open("usuarios.txt");
     while(getline(lectura,linea)){
+        string guarda="";
+        int posi=1;
         if(linea[0]=='*'){
-            lineapresente=0;
-            string guardar="";
-            for(int i=1;linea[i]!=':';i++){
-                guardar+=linea[i];
-                conteo=i;
+            lineapresente=numusuarios;
+            guarda="";
+            posi=1;
+            while(linea[posi]!=':') {
+                guarda+=linea[posi];
+                posi++;
             }
-            usuarios[numusuarios].setnombre(guardar);
-            if(linea[conteo]==':'){
-                string guardar="";
-                for(int i=conteo+1;linea[i]!='<';i++){
-                    if(linea[i]!=','){
-                        guardar+=linea[i];
-                    }
-                    else{
-                        usuarios[numusuarios].estableceramigos(guardar);
-                        guardar="";
-                    }
-                    conteo=i;
+            usuarios[numusuarios].setnombre(guarda);
+            posi++;
+            guarda="";
+            while(linea[posi]!='<') {
+                if(linea[posi]!=','){
+                    guarda+=linea[posi];
+                    posi++;
                 }
-                if(linea[conteo]=='<'){
-                    guardar="";
-                    for(int i=conteo+1;linea[i]!='\n';i++){
-                        if(linea[i]!=','){
-                            guardar+=linea[i];
-                        }
-                        else{
-                            usuarios[numusuarios].establecersolicitud(guardar);
-                            guardar="";
-                        }
-                    }
+                else{
+                    usuarios[numusuarios].estableceramigos(guarda);
+                    guarda="";
+                    posi++;
                 }
             }
+            usuarios[numusuarios].estableceramigos(guarda);
+            guarda="";
+            posi++;
+            while(linea[posi]!='>'){
+                if(linea[posi]!=','){
+                    guarda+=linea[posi];
+                    posi++;
+                }
+                else{
+                    usuarios[numusuarios].establecersolicitud(guarda);
+                    guarda="";
+                    posi++;
+                }
+            }
+            usuarios[numusuarios].establecersolicitud(guarda);
+            guarda="";
             numusuarios++;
+        }
+        if(linea[0]=='{'){
+            guarda="";
+            posi=1;
+            short unsigned int conteo=0;
+            while(linea[posi]!='}'){
+                if(linea[posi]!=','){
+                    guarda+=linea[posi];
+                    posi++;
+                }
+                else{
+                    if(conteo==0){
+                        usuarios[lineapresente].setcontrasena(guarda);
+                        guarda="";
+                        posi++;
+                    }
+                    if(conteo==1){
+                        usuarios[lineapresente].setnacimiento(guarda);
+                        guarda="";
+                        posi++;
+                    }
+                    if(conteo==2){
+                        usuarios[lineapresente].setcorreo(guarda);
+                        guarda="";
+                        posi++;
+                    }
+                    if(conteo==3){
+                        usuarios[lineapresente].setciudad(guarda);
+                        guarda="";
+                        posi++;
+                    }
+                    if(conteo==4){
+                        usuarios[lineapresente].setpais(guarda);
+                        guarda="";
+                        posi++;
+                    }
+                    conteo++;
+                }
+            }
+            usuarios[lineapresente].setfotousario(guarda);
+            guarda="";
+            posi=0;
+        }
+        if(linea[0]=='#'){
+
         }
     }
 }
