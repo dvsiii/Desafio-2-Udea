@@ -133,7 +133,87 @@ void Interfaz::cargardatos(){
             posi=0;
         }
         if(linea[0]=='#'){
-
+            posi=1;
+            Album albumpunte;
+            Fotos fotopuente;
+            do{
+                while(linea[posi]!=','){
+                    guarda+=linea[posi];
+                    posi++;
+                }
+                albumpunte.setnombre(guarda);
+                posi+=2;
+                guarda="";
+                while(linea[posi]!=']'){
+                    guarda=linea[posi];
+                    posi++;
+                }
+                albumpunte.setprivacidad(stoi(guarda));
+                posi+=2;
+                do{
+                    while(linea[posi]!=','){
+                        while(linea[posi]!='/'){
+                            guarda+=linea[posi];
+                            posi++;
+                        }
+                        fotopuente.setruta(guarda);
+                        posi++;
+                        guarda="";
+                        while(linea[posi]!='<'){
+                            guarda+=linea[posi];
+                            posi++;
+                        }
+                        fotopuente.setfecha(guarda);
+                        guarda="";
+                        posi++;
+                        while(linea[posi]!='>'){
+                            guarda=linea[posi];
+                            posi++;
+                        }
+                        fotopuente.setlikes(stoi(guarda));
+                        guarda="";
+                        posi++;
+                        albumpunte.establecerfotos(fotopuente);
+                    }
+                }
+                while(linea[posi]!='.');
+                usuarios[lineapresente].estableceralbum(albumpunte);
+            }
+            while(linea[posi]!='#');
+        }
+        if(linea[0]=='E'){
+            posi=3;
+            guarda="";
+            Mensajes puente;
+            while(linea[posi]!=' '){
+                guarda+=linea[posi];
+                posi++;
+            }
+            puente.setfecha(guarda);
+            posi++;
+            guarda="";
+            while(linea[posi]!=' '){
+                guarda+=linea[posi];
+                posi++;
+            }
+            puente.setemisor(guarda);
+            guarda="";
+            posi+=2;
+            guarda+=linea[posi];
+            if(stoi(guarda)==1){
+                puente.setleido(true);
+            }
+            else{
+                puente.setleido(false);
+            }
+            posi+=11;
+            guarda="";
+            while(linea[posi]!='.'){
+                guarda+=linea[posi];
+                posi++;
+            }
+            puente.setcontenido(guarda);
+            usuarios[lineapresente].establevermensajes(puente);
         }
     }
 }
