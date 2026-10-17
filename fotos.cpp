@@ -33,3 +33,7 @@ void Fotos::operator++()
 {
     likes++;
 }
+void Fotos::operator--()
+{
+    likes--;
+}

@@ -19,6 +19,13 @@ Usuarios::Usuarios() {
     nummensajes=0;
     numsolicitud=0;
     numamigos=0;
+    iteraciones=0;
+}
+int Usuarios::getiteraciones(){
+    return iteraciones;
+}
+void Usuarios::setiteraciones(int Niteracion){
+    iteraciones=Niteracion;
 }
 string Usuarios::getnombre(){
     return nombre;
@@ -68,9 +75,15 @@ int Usuarios::getnumamigos(){
 void Usuarios::setnumamigos(int Nnumamigos){
     numamigos=Nnumamigos;
 }
+string Usuarios::getamigos(int amigo){
+    return amigos[amigo];
+}
 void Usuarios::estableceramigos(string Namigo){
     amigos[numamigos]=Namigo;
     numamigos++;
+}
+string Usuarios::getsolicitud(int solicitud){
+    return solicitudamigos[solicitud];
 }
 void Usuarios::establecersolicitud(string solicitud){
     solicitudamigos[numsolicitud]=solicitud;
@@ -106,9 +119,15 @@ int Usuarios::getnummensajes(){
 void Usuarios::setnumnensajes(int Nnummensajes){
     nummensajes=Nnummensajes;
 }
+Album Usuarios::getalbum(int nalbum){
+    return album[nalbum];
+}
 void Usuarios::estableceralbum(Album Nalbum){
     album[numalbum]=Nalbum;
     numalbum++;
+}
+Mensajes Usuarios::getmensajes(int Nmensaje){
+    return mensajes[Nmensaje];
 }
 void Usuarios::establevermensajes(Mensajes Nmensaje){
     mensajes[nummensajes]=Nmensaje;
@@ -121,6 +140,7 @@ void Usuarios::BuscarRangoFecha(string Finicial, string Ffinal){
                 mensajes[i].leermensaje();
             }
         }
+        iteraciones++;
     }
 }
 void Usuarios::aceptarsolicitud(string solicitud){
@@ -130,6 +150,7 @@ void Usuarios::aceptarsolicitud(string solicitud){
             estableceramigos(solicitud);
             numsolicitud--;
         }
+        iteraciones++;
     }
 }
 void Usuarios::vermensajes(){
@@ -137,7 +158,11 @@ void Usuarios::vermensajes(){
         if(mensajes[i].getleido()==false){
             mensajes[i].leermensaje();
         }
+        iteraciones++;
     }
+}
+void Usuarios::actualizaralbum(int posicion, Album albumns){
+    album[posicion]=albumns;
 }
 Usuarios::~Usuarios(){
     delete[]album;

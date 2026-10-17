@@ -23,8 +23,11 @@ class Usuarios
     int nummensajes;
     int numsolicitud;
     int numamigos;
+    int iteraciones;
 public:
     Usuarios();
+    int getiteraciones();
+    void setiteraciones(int Niteracion);
     void BuscarRangoFecha(string Finicial, string Ffinal);
     string getnombre();
     void setnombre(string Nnombre);
@@ -42,7 +45,9 @@ public:
     void setinscripcion(string Ninscripcion);
     int getnumamigos();
     void setnumamigos(int Nnumamigos);
+    string getamigos(int numaigo);
     void estableceramigos(string Namigo);
+    string getsolicitud(int solicitud);
     void establecersolicitud(string solicitud);
     int getnumsolicitud();
     void setnumsolicitud(int Nnumsolicitud);
@@ -56,8 +61,11 @@ public:
     void setnumnensajes(int Nnummensajes);
     void aceptarsolicitud(string solicitud);
     void vermensajes();
+    Album getalbum(int album);
     void estableceralbum(Album Nalbum);
+    Mensajes getmensajes(int mensaje);
     void establevermensajes(Mensajes Nmensaje);
+    void actualizaralbum(int posicion, Album album);
     ~Usuarios();
 };
 

@@ -16,6 +16,7 @@ public:
     int getlikes();
     void setlikes(int Nlikes);
     void operator++();
+    void operator--();
 };
 
 #endif // FOTOS_H

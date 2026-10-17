@@ -7,18 +7,21 @@ class Interfaz
 {
     Usuarios* usuarios;
     int numusuarios;
+    int usuario;
+    int iteraciones;
 public:
     Interfaz();
-    void iniciarsesion(string nombre, string clave);
+    bool iniciarsesion(string nombre, string clave);
     int getnumusuarios();
     void setnumusuarios(int Nnumusuarios);
     void enviarsolicitud(string destino, string mandante);
-    void enviarmensaje(string destino, Mensajes mensaje);
+    void visualizarmejoresamigos();
+    void enviarmensaje(string destino, string mensaje, string emisor);
     void cargardatos();
     void actualizardatos();
     void verperfil(string perfil);
-    string sugerencias();
-    void medicionconsumo();
+    string sugerencias(int k, string usuario);
+    void medicionconsumo(string usuario);
     ~Interfaz();
 };
 #endif // INTERFAZ_H
