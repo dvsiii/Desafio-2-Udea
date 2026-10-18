@@ -10,6 +10,9 @@ Interfaz::Interfaz() {
     usuario=0;
     iteraciones=0;
 }
+Usuarios Interfaz::getusuario(){
+    return usuarios[usuario];
+}
 int Interfaz::getnumusuarios(){
     return numusuarios;
 }
@@ -28,10 +31,62 @@ bool Interfaz::iniciarsesion(string nombre, string clave){
     }
     return false;
 }
-void Interfaz::enviarsolicitud(string destino, string mandante){
+void Interfaz::enviarsolicitud(string destino){
+    if(destino==usuarios[usuario].getnombre()){
+        cout<<"No puede ser usted mismo"<<endl;
+        return;
+    }
     for(int i=0;i<numusuarios;i++){
         if(destino==usuarios[i].getnombre()){
-            usuarios[i].establecersolicitud(mandante);
+            for(int j=0;j<usuarios[usuario].getnumamigos();j++){
+                if(destino==usuarios[usuario].getamigos(j)){
+                    cout<<"el usuario es su amigo"<<endl;
+                    return;
+                }
+                iteraciones++;
+            }
+            for(int j=0;j<usuarios[usuario].getnumsolicitud();j++){
+                if(destino==usuarios[usuario].getsolicitud(j)){
+                    cout<<"Usated ya tiene una solicitud pendiente de esa persona"<<endl;
+                    return;
+                }
+                iteraciones++;
+            }
+            for(int j=0;j<usuarios[i].getnumsolicitud();j++){
+                if(usuarios[usuario].getnombre()==usuarios[i].getsolicitud(j)){
+                    cout<<"Usted ya le mando una solicitud a esa persona"<<endl;
+                    return;
+                }
+                iteraciones++;
+            }
+            usuarios[i].establecersolicitud(usuarios[usuario].getnombre());
+        }
+        iteraciones++;
+    }
+}
+void Interfaz::aceptarsolicitud(){
+    string solicitud="";
+    for(int i=0;i<usuarios[usuario].getnumsolicitud();i++){
+        cout<<usuarios[usuario].getsolicitud(i)<<endl;
+        iteraciones++;
+    }
+    cout<<"Si quiere aceptar a alguien ingrese el nombre de quien quiere aceptar"<<endl;
+    cout<<"Caso contrario ingrese salir en minuscula y sin espacios";
+    cin>>solicitud;
+    if(solicitud=="salir"){
+        return;
+    }
+    for(int i=0;i<usuarios[usuario].getnumsolicitud();i++){
+        if(usuarios[usuario].getsolicitud(i)==solicitud){
+            usuarios[usuario].setsolicitud(i,"");
+            usuarios[usuario].estableceramigos(solicitud);
+            usuarios[usuario].setnumsolicitud(usuarios[usuario].getnumsolicitud()-1);
+            for(int j=0;j<numusuarios;j++){
+                if(usuarios[j].getnombre()==solicitud){
+                    usuarios[j].estableceramigos(usuarios[usuario].getnombre());
+                }
+                iteraciones++;
+            }
         }
         iteraciones++;
     }
@@ -96,21 +151,32 @@ void Interfaz::visualizarmejoresamigos(){
         cout<<ganadores[5]<<endl;
     }
 }
-void Interfaz::enviarmensaje(string destino, string mensaje, string emisor){
+void Interfaz::enviarmensaje(){
+    string destino="";
+    char mensaje[512]="";
+    cout<<"Ingrese el usuario a quien el quiere mandar el mensaje: ";
+    cin>>destino;
+    cin.ignore();
+    cout<<"Ingrese el mensaje: ";
+    cin.getline(mensaje, 512);
     auto ahora=chrono::system_clock::now();
     time_t tiempo=chrono::system_clock::to_time_t(ahora);
     tm* fecha=localtime(&tiempo);
     string fechaActual=to_string(1900+fecha->tm_year)+(fecha->tm_mon+1<10?"0":"")+to_string(fecha->tm_mon+1)+(fecha->tm_mday<10?"0":"")+to_string(fecha->tm_mday);
     Mensajes mensaj;
     mensaj.setfecha(fechaActual);
-    mensaj.setemisor(emisor);
+    mensaj.setemisor(usuarios[usuario].getnombre());
     mensaj.setcontenido(mensaje);
     for(int i=0;i<numusuarios;i++){
-        if(destino==usuarios[i].getnombre()){
-            usuarios[i].establevermensajes(mensaj);
+        for(int j=0;j<usuarios[usuario].getnumamigos();j++){
+            if(destino==usuarios[i].getnombre()&&destino==usuarios[usuario].getamigos(j)){
+                usuarios[i].establevermensajes(mensaj);
+                return;
+            }
         }
         iteraciones++;
     }
+    cout<<"No se pudo enviar el mensaje, pues no se pudo encontrar al usuario"<<endl;
 }
 void Interfaz::cargardatos(){
     ifstream lectura("usuarios.txt");
@@ -389,7 +455,12 @@ void Interfaz::verperfil(string perfil){
                 cout<<fotopuente.getruta()<<endl;
                 cout<<fotopuente.getfecha()<<endl;
                 cout<<fotopuente.getlikes()<<endl;
-                cout<<"Desea: 1. Salir del album, 2. ir a la siguiente foto, 3. Ir a la foto anterior, 4. dar or quitar like?, ingrese el numero de la opcion: ";
+                cout<<"Desea"<<endl;
+                cout<<"1. Salir del album"<<endl;
+                cout<<"2. ir a la siguiente foto"<<endl;
+                cout<<"3. Ir a la foto anterior"<<endl;
+                cout<<"4. dar or quitar like?"<<endl;
+                cout<<"ingrese el numero de la opcion: ";
                 cin>>decision;
                 switch(stoi(decision)){
                 case 1: verificacion=false;
@@ -425,7 +496,7 @@ void Interfaz::verperfil(string perfil){
         }
     }
 }
-string Interfaz::sugerencias(int k, string usuario){
+void Interfaz::sugerencias(int k, string usuario){
     int** matriz=new int*[numusuarios];
     int posicion=0;
     string sugerencias[k];
@@ -444,9 +515,9 @@ string Interfaz::sugerencias(int k, string usuario){
         iteraciones++;
     }
         for(int i=0;i<numusuarios;i++){
-        if(usuarios[i].getnombre()==usuario){
-                posicion=i;
-        }
+            if(usuarios[i].getnombre()==usuario){
+                    posicion=i;
+            }
             for(int j=0;j<usuarios[i].getnumamigos();j++){
                 for(int m=0;m<numusuarios;m++){
                     if(usuarios[m].getnombre()==usuarios[i].getamigos(j)){
@@ -489,26 +560,16 @@ string Interfaz::sugerencias(int k, string usuario){
         }
         delete[]matriz;
         for(int i=0;i<k;i++){
-            resultado+=sugerencias[i];
-            resultado+=",";
+            cout<<sugerencias[i]<<endl;
             iteraciones++;
         }
-        return resultado;
 }
-void Interfaz::medicionconsumo(string usuario){
+void Interfaz::medicionconsumo(int iteracionesmain){
     int iteraciontotal=0;
-    int user=0;
-    for(int i=0;i<numusuarios;i++){
-        if(usuarios[i].getnombre()==usuario){
-            user=i;
-            break;
-        }
-        iteraciones++;
-    }
-    iteraciontotal=iteraciones+usuarios[user].getiteraciones();
+    iteraciontotal=iteraciones+usuarios[usuario].getiteraciones()+iteracionesmain;
     cout<<"iteraciones hechas: "<<iteraciontotal<<endl;
     iteraciones=0;
-    usuarios[user].setiteraciones(0);
+    usuarios[usuario].setiteraciones(0);
     int pesoporusuario=sizeof(Usuarios)+(100*sizeof(Album))+(10000*sizeof(Fotos))+(100*sizeof(Mensajes))+(200*sizeof(string));
     int memoriatotal=sizeof(Interfaz)+(numusuarios*pesoporusuario);
     cout<<"Memoria total consumida en el sistema: "<<memoriatotal<<" bytes."<<endl;

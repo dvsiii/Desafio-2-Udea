@@ -18,7 +18,6 @@ class Usuarios
     string* amigos;
     string* solicitudamigos;
     string fotousuario;
-    string sugerencias;
     int numalbum;
     int nummensajes;
     int numsolicitud;
@@ -28,7 +27,7 @@ public:
     Usuarios();
     int getiteraciones();
     void setiteraciones(int Niteracion);
-    void BuscarRangoFecha(string Finicial, string Ffinal);
+    void BuscarRangoFecha();
     string getnombre();
     void setnombre(string Nnombre);
     string getcontrasena();
@@ -53,13 +52,11 @@ public:
     void setnumsolicitud(int Nnumsolicitud);
     string getfotousuario();
     void setfotousario(string Nfotousuario);
-    string getsugerencias();
-    void setsugerencias(string Nsugerencia);
     int getnumalbum();
     void setnumalbum(int Nnumalbum);
     int getnummensajes();
     void setnumnensajes(int Nnummensajes);
-    void aceptarsolicitud(string solicitud);
+    void setsolicitud(int posicion, string solicitud);
     void vermensajes();
     Album getalbum(int album);
     void estableceralbum(Album Nalbum);

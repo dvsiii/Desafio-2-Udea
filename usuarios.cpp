@@ -1,4 +1,5 @@
 #include "usuarios.h"
+#include <iostream>
 using namespace std;
 
 Usuarios::Usuarios() {
@@ -14,7 +15,6 @@ Usuarios::Usuarios() {
     amigos=new string[100];
     solicitudamigos=new string[100];
     fotousuario="";
-    sugerencias="";
     numalbum=0;
     nummensajes=0;
     numsolicitud=0;
@@ -101,12 +101,6 @@ string Usuarios::getfotousuario(){
 void Usuarios::setfotousario(string Nfotousuario){
     fotousuario=Nfotousuario;
 }
-string Usuarios::getsugerencias(){
-    return sugerencias;
-}
-void Usuarios::setsugerencias(string Nsugerencias){
-    sugerencias=Nsugerencias;
-}
 int Usuarios::getnumalbum(){
     return numalbum;
 }
@@ -133,22 +127,18 @@ void Usuarios::establevermensajes(Mensajes Nmensaje){
     mensajes[nummensajes]=Nmensaje;
     nummensajes++;
 }
-void Usuarios::BuscarRangoFecha(string Finicial, string Ffinal){
+void Usuarios::BuscarRangoFecha(){
+    string Finicial="";
+    string Ffinal="";
+    cout<<"Ingrese la fecha inicial de forma añomesdia: ";
+    cin>>Finicial;
+    cout<<"Ingrese la fecha final de forma añomesdia: ";
+    cin>>Ffinal;
     for(int i=0;i<nummensajes;i++){
         if(mensajes[i].getfecha()>=Finicial){
             if(mensajes[i].getfecha()<=Ffinal){
                 mensajes[i].leermensaje();
             }
-        }
-        iteraciones++;
-    }
-}
-void Usuarios::aceptarsolicitud(string solicitud){
-    for(int i=0;i<numsolicitud;i++){
-        if(solicitudamigos[i]==solicitud){
-            solicitudamigos[i]="";
-            estableceramigos(solicitud);
-            numsolicitud--;
         }
         iteraciones++;
     }

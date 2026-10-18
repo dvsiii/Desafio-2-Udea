@@ -10,10 +10,8 @@ class Album
     int privacidad;
     Fotos* foto;
     int numfoto;
-    int iteraciones;
 public:
     Album();
-    int getiteraciones();
     string getnombre();
     void setnombre(string Nnombre);
     string getusuario();

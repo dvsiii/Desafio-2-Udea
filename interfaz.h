@@ -11,17 +11,19 @@ class Interfaz
     int iteraciones;
 public:
     Interfaz();
+    Usuarios getusuario();
     bool iniciarsesion(string nombre, string clave);
     int getnumusuarios();
     void setnumusuarios(int Nnumusuarios);
-    void enviarsolicitud(string destino, string mandante);
+    void enviarsolicitud(string destino);
+    void aceptarsolicitud();
     void visualizarmejoresamigos();
-    void enviarmensaje(string destino, string mensaje, string emisor);
+    void enviarmensaje();
     void cargardatos();
     void actualizardatos();
     void verperfil(string perfil);
-    string sugerencias(int k, string usuario);
-    void medicionconsumo(string usuario);
+    void sugerencias(int k, string usuario);
+    void medicionconsumo(int iteracionesmain);
     ~Interfaz();
 };
 #endif // INTERFAZ_H
