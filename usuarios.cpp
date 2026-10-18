@@ -85,6 +85,9 @@ void Usuarios::estableceramigos(string Namigo){
 string Usuarios::getsolicitud(int solicitud){
     return solicitudamigos[solicitud];
 }
+void Usuarios::setsolicitud(int posicion, string solicitud){
+    solicitudamigos[posicion]=solicitud;
+}
 void Usuarios::establecersolicitud(string solicitud){
     solicitudamigos[numsolicitud]=solicitud;
     numsolicitud++;
@@ -113,7 +116,7 @@ int Usuarios::getnummensajes(){
 void Usuarios::setnumnensajes(int Nnummensajes){
     nummensajes=Nnummensajes;
 }
-Album Usuarios::getalbum(int nalbum){
+Album& Usuarios::getalbum(int nalbum){
     return album[nalbum];
 }
 void Usuarios::estableceralbum(Album Nalbum){

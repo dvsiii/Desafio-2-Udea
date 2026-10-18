@@ -58,7 +58,7 @@ public:
     void setnumnensajes(int Nnummensajes);
     void setsolicitud(int posicion, string solicitud);
     void vermensajes();
-    Album getalbum(int album);
+    Album& getalbum(int album);
     void estableceralbum(Album Nalbum);
     Mensajes getmensajes(int mensaje);
     void establevermensajes(Mensajes Nmensaje);

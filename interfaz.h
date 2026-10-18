@@ -11,7 +11,7 @@ class Interfaz
     int iteraciones;
 public:
     Interfaz();
-    Usuarios getusuario();
+    Usuarios& getusuario();
     bool iniciarsesion(string nombre, string clave);
     int getnumusuarios();
     void setnumusuarios(int Nnumusuarios);

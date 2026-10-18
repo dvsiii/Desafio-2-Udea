@@ -10,7 +10,7 @@ Interfaz::Interfaz() {
     usuario=0;
     iteraciones=0;
 }
-Usuarios Interfaz::getusuario(){
+Usuarios& Interfaz::getusuario(){
     return usuarios[usuario];
 }
 int Interfaz::getnumusuarios(){
@@ -71,7 +71,7 @@ void Interfaz::aceptarsolicitud(){
         iteraciones++;
     }
     cout<<"Si quiere aceptar a alguien ingrese el nombre de quien quiere aceptar"<<endl;
-    cout<<"Caso contrario ingrese salir en minuscula y sin espacios";
+    cout<<"Caso contrario ingrese salir en minuscula y sin espacios: ";
     cin>>solicitud;
     if(solicitud=="salir"){
         return;
@@ -143,12 +143,14 @@ void Interfaz::visualizarmejoresamigos(){
     cout<<ganadores[0]<<endl;
     cout<<ganadores[1]<<endl;
     cout<<ganadores[2]<<endl;
-    cout<<"Si desea actualizar la distribucion ingrese 1, si no ingrese cualquier otro numero: ";
-    cin>>cambio;
-    if(cambio==1){
-        cout<<ganadores[3]<<endl;
-        cout<<ganadores[4]<<endl;
-        cout<<ganadores[5]<<endl;
+    if(usuarios[usuario].getnumamigos()>3){
+        cout<<"Si desea actualizar la distribucion ingrese 1, si no ingrese cualquier otro numero: ";
+        cin>>cambio;
+        if(cambio==1){
+            cout<<ganadores[3]<<endl;
+            cout<<ganadores[4]<<endl;
+            cout<<ganadores[5]<<endl;
+        }
     }
 }
 void Interfaz::enviarmensaje(){
@@ -276,7 +278,7 @@ void Interfaz::cargardatos(){
         }
         if(linea[0]=='#'){
             posi=1;
-            Album albumpunte;
+            Album& albumpunte=usuarios[lineapresente].getalbum(usuarios[lineapresente].getnumalbum());
             Fotos fotopuente;
             do{
                 while(linea[posi]!=','){
@@ -295,38 +297,39 @@ void Interfaz::cargardatos(){
                 albumpunte.setprivacidad(stoi(guarda));
                 posi+=2;
                 do{
-                    while(linea[posi]!=','){
-                        while(linea[posi]!=';'){
-                            guarda+=linea[posi];
-                            posi++;
-                            iteraciones++;
-                        }
-                        fotopuente.setruta(guarda);
+                    if(linea[posi]==','){
                         posi++;
-                        guarda="";
-                        while(linea[posi]!='<'){
-                            guarda+=linea[posi];
-                            posi++;
-                            iteraciones++;
-                        }
-                        fotopuente.setfecha(guarda);
-                        guarda="";
+                    }
+                    while(linea[posi]!=';'){
+                        guarda+=linea[posi];
                         posi++;
-                        while(linea[posi]!='>'){
-                            guarda+=linea[posi];
-                            posi++;
-                            iteraciones++;
-                        }
-                        fotopuente.setlikes(stoi(guarda));
-                        guarda="";
-                        posi++;
-                        albumpunte.establecerfotos(fotopuente);
                         iteraciones++;
                     }
+                    fotopuente.setruta(guarda);
+                    posi++;
+                    guarda="";
+                    while(linea[posi]!='<'){
+                        guarda+=linea[posi];
+                        posi++;
+                        iteraciones++;
+                    }
+                    fotopuente.setfecha(guarda);
+                    guarda="";
+                    posi++;
+                    while(linea[posi]!='>'){
+                        guarda+=linea[posi];
+                        posi++;
+                        iteraciones++;
+                    }
+                    fotopuente.setlikes(stoi(guarda));
+                    guarda="";
+                    posi++;
+                    albumpunte.establecerfotos(fotopuente);
                     iteraciones++;
                 }
                 while(linea[posi]!='.');
-                usuarios[lineapresente].estableceralbum(albumpunte);
+                usuarios[lineapresente].setnumalbum(usuarios[lineapresente].getnumalbum()+1);
+                posi++;
                 iteraciones++;
             }
             while(linea[posi]!='#');
@@ -350,7 +353,7 @@ void Interfaz::cargardatos(){
             }
             puente.setemisor(guarda);
             guarda="";
-            posi+=2;
+            posi++;
             guarda+=linea[posi];
             if(stoi(guarda)==1){
                 puente.setleido(true);
@@ -375,7 +378,6 @@ void Interfaz::cargardatos(){
 void Interfaz::actualizardatos(){
     ofstream escribir("usuarios.txt");
     Mensajes puente;
-    Album puentealbum;
     Fotos puentefoto;
     for(int i=0;i<numusuarios;i++){
         escribir<<"*"<<usuarios[i].getnombre()<<":";
@@ -404,7 +406,7 @@ void Interfaz::actualizardatos(){
         if(usuarios[i].getnumalbum()!=0){
             escribir<<"#";
             for(int j=0;j<usuarios[i].getnumalbum();j++){
-                puentealbum=usuarios[i].getalbum(j);
+                Album& puentealbum=usuarios[i].getalbum(j);
                 escribir<<puentealbum.getnombre()<<","<<"["<<puentealbum.getprivacidad()<<"]:";
                 for(int k=0;k<puentealbum.getnumfoto()-1;k++){
                     puentefoto=puentealbum.getfotos(k);
@@ -412,18 +414,19 @@ void Interfaz::actualizardatos(){
                     iteraciones++;
                 }
                 puentefoto=puentealbum.getfotos(puentealbum.getnumfoto()-1);
-                escribir<<puentefoto.getruta()<<";"<<puentefoto.getfecha()<<"<"<<puentefoto.getlikes()<<">.#"<<endl;
+                escribir<<puentefoto.getruta()<<";"<<puentefoto.getfecha()<<"<"<<puentefoto.getlikes()<<">.";
                 iteraciones++;
             }
+            escribir<<"#"<<endl;
         }
         if(usuarios[i].getnummensajes()!=0){
             for(int j=0;j<usuarios[i].getnummensajes();j++){
                 puente=usuarios[i].getmensajes(j);
                 if(puente.getleido()==true){
-                    escribir<<"El "<<puente.getfecha()<<" "<<puente.getemisor()<<" 1 escribio: "<<puente.getcontenido()<<endl;
+                    escribir<<"El "<<puente.getfecha()<<" "<<puente.getemisor()<<" 1 escribio: "<<puente.getcontenido()<<"."<<endl;
                 }
                 else{
-                    escribir<<"El "<<puente.getfecha()<<" "<<puente.getemisor()<<" 0 escribio: "<<puente.getcontenido()<<endl;
+                    escribir<<"El "<<puente.getfecha()<<" "<<puente.getemisor()<<" 0 escribio: "<<puente.getcontenido()<<"."<<endl;
                 }
                 iteraciones++;
             }
@@ -432,7 +435,6 @@ void Interfaz::actualizardatos(){
     }
 }
 void Interfaz::verperfil(string perfil){
-    Album puente;
     Fotos fotopuente;
     string decision="";
     int posicion=0;
@@ -442,7 +444,7 @@ void Interfaz::verperfil(string perfil){
             cout<<usuarios[i].getnombre()<<endl;
             cout<<usuarios[i].getfotousuario()<<endl;
             for(int j=0;j<usuarios[i].getnumalbum();j++){
-                puente=usuarios[i].getalbum(j);
+                Album& puente=usuarios[i].getalbum(j);
                 cout<<j<<". "<<puente.getnombre()<<endl;
                 iteraciones++;
             }
@@ -450,7 +452,7 @@ void Interfaz::verperfil(string perfil){
             cin>>decision;
             while(verificacion==true){
                 unsigned short int album=stoi(decision);
-                puente=usuarios[i].getalbum(stoi(decision));
+                Album& puente=usuarios[i].getalbum(stoi(decision));
                 fotopuente=puente.getfotos(posicion);
                 cout<<fotopuente.getruta()<<endl;
                 cout<<fotopuente.getfecha()<<endl;
@@ -488,7 +490,6 @@ void Interfaz::verperfil(string perfil){
                         --fotopuente;
                     }
                     puente.actualizarfoto(posicion, fotopuente);
-                    usuarios[i].actualizaralbum(album, puente);
                 default: cout<<"Ingrese un valor valido, que sea 1, 2, 3 o 4";
                 }
                 iteraciones++;

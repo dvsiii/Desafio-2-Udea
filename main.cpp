@@ -4,8 +4,8 @@ using namespace std;
 int main()
 {
     Interfaz local;
-    Usuarios usuario;
     string nombre="";
+    Usuarios* usuario = nullptr;
     string clave="";
     string decision="";
     bool salir=false;
@@ -19,6 +19,15 @@ int main()
         cout<<"ingrese el numero de la accion: ";
         cin>>decision;
         if(decision=="y"){
+            if(local.iniciarsesion(nombre,clave)==true){
+                cout<<"si desea cambiar de sesion ingrese y en misnuscula sin espacios"<<endl;
+                cout<<"Ingrese su decision: ";
+                cin>>decision;
+                if(decision=="y"){
+                    nombre="";
+                    clave="";
+                }
+            }
             while(local.iniciarsesion(nombre,clave)==false){
                 cout<<"Por favor ingrese su nombre de usuario: ";
                 cin>>nombre;
@@ -36,15 +45,15 @@ int main()
         else{
             cout<<"usted ingreso un valor invalido, intente denuevo"<<endl;
         }
+        local.visualizarmejoresamigos();
         while(true){
             if(iteraciones>=2){
                 local.actualizardatos();
             }
-            usuario=local.getusuario();
+            usuario=&local.getusuario();
             local.medicionconsumo(iteraciones);
             iteraciones=0;
-            local.visualizarmejoresamigos();
-            cout<<"Bienvenido "<<usuario.getnombre()<<endl;
+            cout<<"Bienvenido "<<usuario->getnombre()<<endl;
             cout<<"Que desea hacer hoy?"<<endl;
             cout<<"1.-Administrar Amistades"<<endl;
             cout<<"2.-Visitar perfil de un amigo"<<endl;
@@ -82,32 +91,35 @@ int main()
             }
             else if(decision=="3"){
                 while(true){
-                    cout<<"Ingrese cuantas sugerencias desea ver, maximo 20";
+                    cout<<"Ingrese cuantas sugerencias desea ver, maximo 20: ";
                     cin>>decision;
                     if(stoi(decision)>20){
                         cout<<"No puede ser mas de 20"<<endl;
                     }
                     else{
-                        local.sugerencias(stoi(decision),usuario.getnombre());
-                        while(true){
-                            cout<<"desea enviarle solicitud de amistad a alguno?"<<endl;
-                            cout<<"s: si"<<endl;
-                            cout<<"n: no"<<endl;
-                            cout<<"Su decision: ";
-                            cin>>decision;
-                            if(decision=="s"){
-                                local.enviarsolicitud(decision);
-                                break;
-                            }
-                            else if(decision=="n"){
-                                break;
-                            }
-                            else{
-                                cout<<"Ingrese un caracter valido"<<endl;
-                            }
-                        }
+                        break;
                     }
                     iteraciones++;
+                }
+                local.sugerencias(stoi(decision),usuario->getnombre());
+                while(true){
+                    cout<<"desea enviarle solicitud de amistad a alguno?"<<endl;
+                    cout<<"s: si"<<endl;
+                    cout<<"n: no"<<endl;
+                    cout<<"Su decision: ";
+                    cin>>decision;
+                    if(decision=="s"){
+                        cout<<"Ingrese el usuario a quien desea mandarle solicitud: ";
+                        cin>>decision;
+                        local.enviarsolicitud(decision);
+                        break;
+                    }
+                    else if(decision=="n"){
+                        break;
+                    }
+                    else{
+                        cout<<"Ingrese un caracter valido"<<endl;
+                    }
                 }
             }
             else if(decision=="4"){
@@ -123,11 +135,11 @@ int main()
                         break;
                     }
                     else if(decision=="b"){
-                        usuario.vermensajes();
+                        usuario->vermensajes();
                         break;
                     }
                     else if(decision=="c"){
-                        usuario.BuscarRangoFecha();
+                        usuario->BuscarRangoFecha();
                         break;
                     }
                     else{
