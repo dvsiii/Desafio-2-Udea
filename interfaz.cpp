@@ -278,9 +278,9 @@ void Interfaz::cargardatos(){
         }
         if(linea[0]=='#'){
             posi=1;
-            Album& albumpunte=usuarios[lineapresente].getalbum(usuarios[lineapresente].getnumalbum());
             Fotos fotopuente;
             do{
+                Album& albumpunte=usuarios[lineapresente].getalbum(usuarios[lineapresente].getnumalbum());
                 while(linea[posi]!=','){
                     guarda+=linea[posi];
                     posi++;
@@ -327,7 +327,7 @@ void Interfaz::cargardatos(){
                     albumpunte.establecerfotos(fotopuente);
                     iteraciones++;
                 }
-                while(linea[posi]!='.');
+                while(linea[posi]!='/');
                 usuarios[lineapresente].setnumalbum(usuarios[lineapresente].getnumalbum()+1);
                 posi++;
                 iteraciones++;
@@ -445,12 +445,15 @@ void Interfaz::verperfil(string perfil){
             cout<<usuarios[i].getfotousuario()<<endl;
             for(int j=0;j<usuarios[i].getnumalbum();j++){
                 Album& puente=usuarios[i].getalbum(j);
-                cout<<j<<". "<<puente.getnombre()<<endl;
+                if(puente.getprivacidad()==1||puente.getprivacidad()==2){
+                    cout<<j<<". "<<puente.getnombre()<<endl;
+                }
                 iteraciones++;
             }
             cout<<"Ingrese el numero del album que desea ver: ";
             cin>>decision;
             while(verificacion==true){
+                string opcionmenu="";
                 unsigned short int album=stoi(decision);
                 Album& puente=usuarios[i].getalbum(stoi(decision));
                 fotopuente=puente.getfotos(posicion);
@@ -463,8 +466,8 @@ void Interfaz::verperfil(string perfil){
                 cout<<"3. Ir a la foto anterior"<<endl;
                 cout<<"4. dar or quitar like?"<<endl;
                 cout<<"ingrese el numero de la opcion: ";
-                cin>>decision;
-                switch(stoi(decision)){
+                cin>>opcionmenu;
+                switch(stoi(opcionmenu)){
                 case 1: verificacion=false;
                     break;
                 case 2: if(posicion!=puente.getnumfoto()-1){
@@ -482,14 +485,15 @@ void Interfaz::verperfil(string perfil){
                     }
                     break;
                 case 4: cout<<"si desea dar like ingrese el uno, de lo contrario ingrese el 0: ";
-                    cin>>decision;
-                    if(stoi(decision)==1){
+                    cin>>opcionmenu;
+                    if(stoi(opcionmenu)==1){
                         ++fotopuente;
                     }
                     else{
                         --fotopuente;
                     }
                     puente.actualizarfoto(posicion, fotopuente);
+                    break;
                 default: cout<<"Ingrese un valor valido, que sea 1, 2, 3 o 4";
                 }
                 iteraciones++;
