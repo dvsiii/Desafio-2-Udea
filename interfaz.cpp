@@ -363,7 +363,7 @@ void Interfaz::cargardatos(){
             }
             posi+=11;
             guarda="";
-            while(linea[posi]!='.'){
+            while(linea[posi]!='~'){
                 guarda+=linea[posi];
                 posi++;
                 iteraciones++;
@@ -414,7 +414,7 @@ void Interfaz::actualizardatos(){
                     iteraciones++;
                 }
                 puentefoto=puentealbum.getfotos(puentealbum.getnumfoto()-1);
-                escribir<<puentefoto.getruta()<<";"<<puentefoto.getfecha()<<"<"<<puentefoto.getlikes()<<">.";
+                escribir<<puentefoto.getruta()<<";"<<puentefoto.getfecha()<<"<"<<puentefoto.getlikes()<<">/";
                 iteraciones++;
             }
             escribir<<"#"<<endl;
@@ -423,10 +423,10 @@ void Interfaz::actualizardatos(){
             for(int j=0;j<usuarios[i].getnummensajes();j++){
                 puente=usuarios[i].getmensajes(j);
                 if(puente.getleido()==true){
-                    escribir<<"El "<<puente.getfecha()<<" "<<puente.getemisor()<<" 1 escribio: "<<puente.getcontenido()<<"."<<endl;
+                    escribir<<"El "<<puente.getfecha()<<" "<<puente.getemisor()<<" 1 escribio: "<<puente.getcontenido()<<"~"<<endl;
                 }
                 else{
-                    escribir<<"El "<<puente.getfecha()<<" "<<puente.getemisor()<<" 0 escribio: "<<puente.getcontenido()<<"."<<endl;
+                    escribir<<"El "<<puente.getfecha()<<" "<<puente.getemisor()<<" 0 escribio: "<<puente.getcontenido()<<"~"<<endl;
                 }
                 iteraciones++;
             }
