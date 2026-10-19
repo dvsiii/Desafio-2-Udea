@@ -220,7 +220,9 @@ void Interfaz::cargardatos(){
                 posi++;
                 iteraciones++;
             }
-            usuarios[numusuarios].estableceramigos(guarda);
+            if(guarda!=""){
+                usuarios[numusuarios].estableceramigos(guarda);
+            }
             guarda="";
             posi++;
             while(linea[posi]!='>'){
@@ -234,7 +236,9 @@ void Interfaz::cargardatos(){
                 posi++;
                 iteraciones++;
             }
-            usuarios[numusuarios].establecersolicitud(guarda);
+            if(guarda!=""){
+                usuarios[numusuarios].establecersolicitud(guarda);
+            }
             guarda="";
             numusuarios++;
         }
@@ -280,6 +284,7 @@ void Interfaz::cargardatos(){
             posi=1;
             Fotos fotopuente;
             do{
+                guarda="";
                 Album& albumpunte=usuarios[lineapresente].getalbum(usuarios[lineapresente].getnumalbum());
                 while(linea[posi]!=','){
                     guarda+=linea[posi];
@@ -297,6 +302,7 @@ void Interfaz::cargardatos(){
                 albumpunte.setprivacidad(stoi(guarda));
                 posi+=2;
                 do{
+                    guarda="";
                     if(linea[posi]==','){
                         posi++;
                     }
@@ -363,7 +369,7 @@ void Interfaz::cargardatos(){
             }
             posi+=11;
             guarda="";
-            while(linea[posi]!='~'){
+            while(posi<linea.length()&&linea[posi]!='~'){
                 guarda+=linea[posi];
                 posi++;
                 iteraciones++;
